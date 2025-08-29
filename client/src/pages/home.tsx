@@ -183,6 +183,104 @@ export default function Home() {
           )}
         </div>
       </section>
+
+      {/* Projects Section */}
+      <section id="projects" className="py-16 bg-muted/30" data-testid="section-projects">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-foreground mb-4">Projects</h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              A showcase of my development work, from web applications to mobile apps and everything in between.
+            </p>
+          </div>
+          
+          {isLoading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {Array.from({ length: 3 }).map((_, index) => (
+                <div key={index} className="space-y-4">
+                  <Skeleton className="aspect-video w-full" />
+                  <Skeleton className="h-4 w-3/4" />
+                  <Skeleton className="h-4 w-1/2" />
+                  <Skeleton className="h-20 w-full" />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {projects.slice(0, 3).map((project) => (
+                <ContentCard key={`project-${project.id}`} item={project} type="project" />
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Blog Section */}
+      <section id="blog" className="py-16 bg-background" data-testid="section-blog">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-foreground mb-4">Latest Blog Posts</h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Thoughts, tutorials, and insights about web development, design, and technology.
+            </p>
+          </div>
+          
+          {isLoading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {Array.from({ length: 3 }).map((_, index) => (
+                <div key={index} className="space-y-4">
+                  <Skeleton className="aspect-video w-full" />
+                  <Skeleton className="h-4 w-3/4" />
+                  <Skeleton className="h-4 w-1/2" />
+                  <Skeleton className="h-20 w-full" />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {blogPosts.slice(0, 3).map((post) => (
+                <ContentCard key={`blog-${post.id}`} item={post} type="blog" />
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* About Section */}
+      <section id="about" className="py-16 bg-muted/30" data-testid="section-about">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-3xl font-bold text-foreground mb-8">About Me</h2>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
+              <div className="lg:col-span-2 text-left">
+                <p className="text-muted-foreground mb-6 text-lg leading-relaxed">
+                  I'm a passionate full-stack developer with a love for creating meaningful digital experiences. 
+                  With expertise in modern web technologies like React, TypeScript, and Node.js, I enjoy building 
+                  applications that solve real-world problems.
+                </p>
+                <p className="text-muted-foreground mb-6 text-lg leading-relaxed">
+                  When I'm not coding, you'll find me exploring new technologies, contributing to open-source projects, 
+                  or sharing my knowledge through blog posts and tutorials. I believe in continuous learning and 
+                  the power of community in the tech world.
+                </p>
+                <div className="flex flex-wrap gap-3">
+                  <span className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium">React</span>
+                  <span className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium">TypeScript</span>
+                  <span className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium">Node.js</span>
+                  <span className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium">Next.js</span>
+                  <span className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium">TailwindCSS</span>
+                  <span className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium">PostgreSQL</span>
+                </div>
+              </div>
+              <div className="flex justify-center">
+                <div className="w-64 h-64 bg-gradient-to-br from-primary/20 to-accent/20 rounded-full flex items-center justify-center">
+                  <div className="text-6xl">👨‍💻</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
