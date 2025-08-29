@@ -1,39 +1,45 @@
-import { useQuery } from "@tanstack/react-query";
 import { useState, useMemo } from "react";
 import { ContentCard } from "@/components/content-card";
 import { SearchFilters } from "@/components/search-filters";
 import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
 import type { BlogPost, Project } from "@shared/schema";
+import { blogPosts as staticBlogPosts, projects as staticProjects } from "../data/content";
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeFilter, setActiveFilter] = useState("all");
   const [visibleItems, setVisibleItems] = useState(6);
 
-  // Fetch blog posts
-  const {
-    data: blogPosts = [],
-    isLoading: blogLoading,
-    error: blogError,
-  } = useQuery<BlogPost[]>({
-    queryKey: ["/api/blog"],
-  });
+  // Use static data
+  const blogPosts = staticBlogPosts;
+  const projects = staticProjects;
 
-  // Fetch projects
-  const {
-    data: projects = [],
-    isLoading: projectsLoading,
-    error: projectsError,
-  } = useQuery<Project[]>({
-    queryKey: ["/api/projects"],
-  });
+  // Client-side search functionality
+  const searchResults = useMemo(() => {
+    if (searchQuery.length === 0) return [];
+    
+    const searchTerm = searchQuery.toLowerCase();
+    const results: (BlogPost | Project)[] = [];
 
-  // Search query
-  const { data: searchResults = [] } = useQuery<(BlogPost | Project)[]>({
-    queryKey: ["/api/search", searchQuery],
-    enabled: searchQuery.length > 0,
-  });
+    // Search blog posts
+    const blogResults = blogPosts.filter(post =>
+      post.title.toLowerCase().includes(searchTerm) ||
+      post.excerpt.toLowerCase().includes(searchTerm) ||
+      post.tags.some(tag => tag.toLowerCase().includes(searchTerm)) ||
+      post.category.toLowerCase().includes(searchTerm)
+    );
+    
+    // Search projects
+    const projectResults = projects.filter(project =>
+      project.title.toLowerCase().includes(searchTerm) ||
+      project.description.toLowerCase().includes(searchTerm) ||
+      project.tags.some(tag => tag.toLowerCase().includes(searchTerm)) ||
+      project.category.toLowerCase().includes(searchTerm)
+    );
+
+    results.push(...blogResults, ...projectResults);
+    return results.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
+  }, [searchQuery, blogPosts, projects]);
 
   // Filter and combine content
   const filteredContent = useMemo(() => {
@@ -73,21 +79,7 @@ export default function Home() {
     return content;
   }, [blogPosts, projects, searchResults, searchQuery, activeFilter]);
 
-  const isLoading = blogLoading || projectsLoading;
-  const hasError = blogError || projectsError;
-
-  if (hasError) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-foreground mb-4">Error Loading Content</h2>
-          <p className="text-muted-foreground">
-            Unable to load blog posts and projects. Please try again later.
-          </p>
-        </div>
-      </div>
-    );
-  }
+  const isLoading = false; // No loading needed for static data
 
   return (
     <div className="min-h-screen bg-background">

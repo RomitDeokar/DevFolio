@@ -1,4 +1,3 @@
-import { useQuery } from "@tanstack/react-query";
 import { useParams, Link } from "wouter";
 import { ArrowLeft, Calendar, Clock, Eye, Share2, Twitter, Linkedin, Link as LinkIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -6,18 +5,15 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { MarkdownRenderer } from "@/lib/markdown";
 import type { BlogPost } from "@shared/schema";
+import { blogPosts } from "../data/content";
 
 export default function BlogDetail() {
   const { slug } = useParams<{ slug: string }>();
 
-  const {
-    data: post,
-    isLoading,
-    error,
-  } = useQuery<BlogPost>({
-    queryKey: ["/api/blog", slug],
-    enabled: !!slug,
-  });
+  // Find post from static data
+  const post = blogPosts.find(p => p.slug === slug);
+  const isLoading = false;
+  const error = !post;
 
   const formatDate = (date: Date) => {
     return new Intl.DateTimeFormat("en-US", {

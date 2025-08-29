@@ -1,4 +1,3 @@
-import { useQuery } from "@tanstack/react-query";
 import { useParams, Link } from "wouter";
 import { 
   ArrowLeft, 
@@ -16,18 +15,15 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { MarkdownRenderer } from "@/lib/markdown";
 import type { Project } from "@shared/schema";
+import { projects } from "../data/content";
 
 export default function ProjectDetail() {
   const { slug } = useParams<{ slug: string }>();
 
-  const {
-    data: project,
-    isLoading,
-    error,
-  } = useQuery<Project>({
-    queryKey: ["/api/projects", slug],
-    enabled: !!slug,
-  });
+  // Find project from static data
+  const project = projects.find(p => p.slug === slug);
+  const isLoading = false;
+  const error = !project;
 
   const formatDate = (date: Date) => {
     return new Intl.DateTimeFormat("en-US", {
