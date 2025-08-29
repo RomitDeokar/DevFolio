@@ -2,6 +2,7 @@ import { useState, useMemo } from "react";
 import { ContentCard } from "@/components/content-card";
 import { SearchFilters } from "@/components/search-filters";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import type { BlogPost, Project } from "@shared/schema";
 import { blogPosts as staticBlogPosts, projects as staticProjects } from "../data/content";
 
